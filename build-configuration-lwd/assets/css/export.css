@@ -1,0 +1,22 @@
+.bcl-build--preview_wrap {
+    width: 1080px;
+    margin: 20px auto;
+}
+.bcl-build--preview_wrap * {
+    display:block;
+    width: 100%;
+}
+.bcl-build--preview_inner {
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 1px 3px 1px rgb(0 0 0 / 10%);
+    width: 100%;
+}
+
+table.bcl--print-item {
+    border-collapse: collapse;
+    width: 100%;
+}
+.bcl--print-item img {
+    width: 200px;
+}
