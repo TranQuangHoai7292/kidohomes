@@ -23,7 +23,7 @@ jQuery(document).ready(function($){
     $("body").on("click", ".bcl-select--item", function (e) {
         if (data_bcl_builder.token_page === url_page) {
             var id_category = $(this).closest(".bcl-build-sanitary-all-item").data("category-id"),
-                id_chosen = $(this).data('add');
+                id_chosen = $(this).data('old-chosen');
             $.ajax({
                 method: "POST",
                 url: data_bcl_builder.ajaxurl,
@@ -61,7 +61,6 @@ jQuery(document).ready(function($){
                 sku_product = $(this).data("sku"),
                 id_old_chose = $(this).data("old-chosen"),
                 check_product;
-
             $.ajax({
                 method: "POST",
                 url: data_bcl_builder.ajaxurl,
@@ -81,29 +80,36 @@ jQuery(document).ready(function($){
                         sku: sku_product
                     };
                     object_bcl.selectItem({id: cat_id}, cookie_product, id_product);
-                    Cookies.set("bcl_build_selected_" + config_bcl, object_bcl, {expires: 7, path: ""});
+                    Cookies.set("bcl_build_selected_" + config_bcl, JSON.stringify(object_bcl), {expires: 7, path: ""});
                     check_product = object_bcl.getConfig();
-                    console.log(check_product[cat_id].items[id_product].quantity);
-
-                    if (Object.keys(check_product[cat_id].items).length == 1) {
-                        $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"] .item-bcl-build').html(data);
-                        $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').attr("data-chosen", id_product);
-                        $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').attr("data-qty", check_product[cat_id].items[id_product].quantity);
-                        if (check_product[cat_id].items[id_product].quantity > 1) {
-                            $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').find(".bcl-buildrm--item_chosen").hide();
-                            $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').find(".bcl-minus").show();
-                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"] .bcl-wrap--quantity').find('.bcl-build--qty').val(check_product[cat_id].items[id_product].quantity);
+                    if (id_old_chose == 0) {
+                        if (Object.keys(check_product[cat_id].items).length == 1) {
+                            $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"] .item-bcl-build').html(data);
+                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-chosen", id_product);
+                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-qty", check_product[cat_id].items[id_product].quantity);
+                            if (check_product[cat_id].items[id_product].quantity > 1) {
+                                $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').find(".bcl-buildrm--item_chosen").hide();
+                                $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').find(".bcl-minus").show();
+                                $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"] .bcl-wrap--quantity').find('.bcl-build--qty').val(check_product[cat_id].items[id_product].quantity);
+                            } else {
+                                $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').find(".bcl-minus").hide();
+                            }
+                            $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"]').append('<div class="add-bcl-item-by-category"><a href="javascript:;" class="bcl-select--item" data-category-id="'+ cat_id +'">Thêm sản phẩm</a></div>');
                         } else {
-                            $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').find(".bcl-minus").hide();
+                            $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"] .item-bcl-build').append(data);
+                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-chosen", id_product);
+                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-qty", qty_product);
+                            $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').find(".bcl-minus").hide();
                         }
-                        $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"]').append('<div class="add-bcl-item-by-category"><a href="javascript:;" class="bcl-select--item" data-category-id="'+ cat_id +'">Thêm sản phẩm</a></div>');
+                        $('.bcl-item--query[data-product="'+ id_product +'"]').find('.bcl-select--item').attr('data-old-chosen',id_product);
                     } else {
-
-                        $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"] .item-bcl-build').append(data);
-                        $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').attr("data-chosen", id_product);
-                        $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').attr("data-qty", qty_product);
-                        $('.bcl-build-sanitary--item[data-category-id="' + cat_id + '"]').find(".bcl-minus").hide();
+                        console.log('123');
+                        $('.bcl-build-sanitary-all-item[data-category-id="' + cat_id + '"] .bcl-build-sanitary--item[data-product-id="'+ id_old_chose +'"]').replaceWith(data);
+                        $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-chosen", id_product);
+                        $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').attr("data-qty", check_product[cat_id].items[id_product].quantity);
+                        $('.bcl-build-sanitary--item[data-product-id="' + id_product + '"]').find(".bcl-minus").hide();
                     }
+
                     isable();
                 }
             });
@@ -145,7 +151,7 @@ jQuery(document).ready(function($){
                 jamus == 0 && $(this).closest(".bcl-wrap--quantity").find(".bcl-buildrm--item_chosen").trigger("click");
                 var nevaya = $("#bcl-wrap span.active").data("build-bcl"), abbigal = new BuildSatary(nevaya), cecily = $(this).closest(".bcl-build-sanitary--item").data("category-id"), shamario = $(this).closest(".bcl-build-sanitary--item").find(".bcl-item--query").data("chosen");
                 abbigal.updateItem(cecily, shamario, "quantity", jamus);
-                Cookies.set("bcl_build_selected_" + nevaya, abbigal, {expires: 7, path: ""});
+                Cookies.set("bcl_build_selected_" + nevaya, JSON.stringify(abbigal), {expires: 7, path: ""});
                 isable();
             }
         });
@@ -174,11 +180,23 @@ jQuery(document).ready(function($){
     //Xóa sản phẩm
     $("body").on("click", ".bcl-buildrm--item_chosen", function (e) {
         if (data_bcl_builder.token_page === url_page) {
-            var bcl_build = $("#bcl-wrap span.active").data("bcl-build"), object_build = new BuildSatary(bcl_build), id_category = $(this).closest(".bcl-build-sanitary--item").data("category-id"), id_product = $(this).closest(".bcl-build-sanitary--item").data("chosen");
-            object_build.removeItem(id_category, id_product);
-            Cookies.set("bcl_build_selected_" + bcl_build, object_build, {expires: 7, path: ""});
-            $html = tayyib({data_category_id: $(this).closest(".bcl-build-sanitary--item").data("category-id"), src: $(this).closest(".bcl-build-sanitary--item").data("image_src")}, data_bcl_builder.template_empty);
-            $(this).closest(".bcl-build-sanitary--item").find(".bcl-build-sanitary--loaded").html($html);
+            var bcl_build = $("#bcl--config-wrap span.active").data("build-bcl"),
+                object_build = new BuildSatary(bcl_build),
+                id_category = $(this).closest(".bcl-build-sanitary--ite").data("category-id"),
+                id_product = $(this).closest(".bcl-build-sanitary--item").data("chosen"),
+                src_image,
+                category_name,
+                check_product = object_build.getConfig();
+                object_build.removeItem(id_category, id_product);
+             Cookies.set("bcl_build_selected_" + bcl_build, JSON.stringify(object_build), {expires: 7, path: ""});
+            if (!check_product[id_category]) {
+                console.log('123');
+                src_image = $('#bcl-build-sanitary-all-item[data-category-id="'+ id_category +'"]').data('image-src');
+                category_name = $('#bcl-build-sanitary-all-item[data-category-id="'+ id_category +'"]').data('category-name');
+                $('#bcl-build-sanitary-all-item[data-category-id="'+ id_category +'"] .item-bcl-build').html('<div class="bcl-build-sanitary--item" data-category-id="'+ id_category +'"><strong class="bcl-flx1 bcl-build-sanitary--item_name">'+ category_name +'</strong><div class="bcl-build-sanitary--loaded"><div class="bcl-icon--feat bcl-select--item bcl-flx1"><img width="150" height="150" src="'+ src_image +'"/></div><span class="bcl-details--item">Vui lòng chọn sản phẩm</span><a href="javascript:;" class="bcl-select--item" data-category-id="'+ id_category +'" data-add="0"><span>Chọn</span></a></div></div>');
+            } else {
+                $(this).closest(".bcl-build-sanitary--item").remove();
+            }
             isable();
         } else {
             alert('Plugin của bạn chưa kích hoạt bản quyền. Hãy kích hoạt để sử dụng Plugin');
@@ -552,7 +570,6 @@ jQuery(document).ready(function($){
     function rekiya() {
         var config_bcl = $("#bcl-wrap span.active").data("build-bcl"), object_bcl = new BuildSatary(config_bcl), config = object_bcl.getConfig(), kiarie = 0, adrielys = 0, jacarious = 0, emar;
         for (var johnda in config) {
-            console.log(johnda);
             if (config.hasOwnProperty(johnda)) {
                 for ( var id_product in config[johnda].items) {
                     emar = config[johnda].items[id_product];

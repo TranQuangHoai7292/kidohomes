@@ -50,9 +50,9 @@
                         $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
                         $image = wp_get_attachment_url( $thumbnail_id );
                         ?>
-                    <div class="bcl-build-sanitary-all-item" data-category-id="<?php echo $category->term_id ?>">
+                    <div class="bcl-build-sanitary-all-item" data-category-id="<?php echo $category->term_id ?>" data-image-src="<?php echo $image ? $image : BCL_URL . '/assets/images/image-empty.webp'; ?>" data-category-name="<?php echo $category->name ?>">
                         <div class="item-bcl-build">
-                            <div class="bcl-build-sanitary--item" data-category-id="<?php echo $category->term_id ?>" data-image_src="<?php echo $image[0] ? $image[0] : BCL_URL . '/assets/images/image-empty.webp';  ?>">
+                            <div class="bcl-build-sanitary--item" data-category-id="<?php echo $category->term_id ?>">
                                 <strong class="bcl-flx1 bcl-build-sanitary--item_name"><?php echo $category->name ?></strong>
                                 <div class="bcl-build-sanitary--loaded">
                                     <div class="bcl-icon--feat bcl-select--item bcl-flx1">

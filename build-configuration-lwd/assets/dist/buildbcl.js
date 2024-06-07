@@ -36,9 +36,9 @@ class BuildSatary {
         let item_index = this.getItemIndexInCategory(category_id, item_id);
         if (item_index > -1) {
             //delete item from array
-            this.select_config[category_id].items.splice(item_index, 1);
+            delete this.select_config[category_id].items[item_index];
             //if category empty, delete the whole category
-            if (this.select_config[category_id].items.length == 0) {
+            if (Object.keys(this.select_config[category_id].items).length == 0) {
                 this.emptyCategory(category_id);
             }
             //show visually
@@ -65,12 +65,8 @@ class BuildSatary {
     }
     getItemIndexInCategory(category_id, item_id) {
         let item_index = -1; //non-exist
-        if (this.select_config.hasOwnProperty(category_id)) {
-            this.select_config[category_id].items.forEach(function(item, index) {
-                if (item.id == item_id) {
-                    item_index = index;
-                }
-            });
+        if (this.select_config.hasOwnProperty(category_id) && this.select_config[category_id].items[item_id]) {
+            item_index = item_id;
         }
         return item_index;
     }

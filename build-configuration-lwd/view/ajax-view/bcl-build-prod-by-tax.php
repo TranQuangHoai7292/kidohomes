@@ -103,7 +103,7 @@
                 </ins>
                 <?php endif; ?>
             </div>
-            <a class="bcl-item--choose_search" data-image_src="<?php echo $full_url[0]; ?>" data-id="<?php echo get_the_ID(); ?>" data-sku="<?php echo $product_info->get_sku(); ?>" data-tax-id="" data-qty="1" data-price="<?php echo $product_info->is_on_sale() ? $product_info->get_sale_price() : $product_info->get_regular_price() ?>" data-old-chosen="<?php echo $data['id_chosen'] ? $data['id_chosen'] : get_the_ID(); ?>"><span>Chọn</span></a>
+            <a class="bcl-item--choose_search" data-image_src="<?php echo $full_url[0]; ?>" data-id="<?php echo get_the_ID(); ?>" data-sku="<?php echo $product_info->get_sku(); ?>" data-tax-id="" data-qty="1" data-price="<?php echo $product_info->is_on_sale() ? $product_info->get_sale_price() : $product_info->get_regular_price() ?>" data-old-chosen="<?php echo $data['id_chosen']?>"><span>Chọn</span></a>
         </div><!-- items -->
         <?php  endwhile; endif; ?>
     </div>
